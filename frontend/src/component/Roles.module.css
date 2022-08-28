@@ -19,15 +19,25 @@
     box-shadow: 0 4px 4px 4px rgb(230, 230, 230);
 }
 
-.picBackground {
+.picBackground1 {
     width: 100%;
     height: 9vh;
-    background-image: url("../../public/imgs/1.JPG");
+    background-image: url("../../public/imgs/2.png");
     background-size: 15vw;
     background-repeat: no-repeat;
     object-fit: cover;
     border-radius: 10px 10px 0 0 ;
 
+}
+
+.picBackground2 {
+    width: 100%;
+    height: 9vh;
+    background-image: url("../../public/imgs/3.png");
+    background-size: 15vw;
+    background-repeat: no-repeat;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0 ;
 }
 
 .picAssetInfo {

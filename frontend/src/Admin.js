@@ -35,7 +35,6 @@ export default function Admin() {
         if(_id) {
           request.get(`/api/roles/personal?_id=${_id}`)
           .then((res) => {
-            console.log(res.data);
               setPersonal(res.data.data)
           })
           .catch((err) => {
@@ -46,7 +45,7 @@ export default function Admin() {
       return () => {
           clearInterval(timer)
       }     
-    },[])
+    },[navigate])
 
     const menu = (
         <Menu
@@ -154,7 +153,7 @@ export default function Admin() {
                               </Space>
                             </div>
                         </Dropdown>
-                        <img src="/imgs/1.JPG" alt="" width={30} height={30}className={styles.image}></img>                        
+                        <img src="/imgs/4.webp" alt="" width={30} height={30}className={styles.image}></img>                        
                     </div>
                 </div>
                 {/* 个人信息modal */}

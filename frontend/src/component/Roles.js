@@ -16,6 +16,7 @@ export default function Roles() {
     const [current, setCurrent] = useState(1);//pagination
     const [form] = Form.useForm()
     const [clickOk, setClickOk] = useState(true)
+    const [total, setTotal] = useState(0)
 
 
     //获取所有user
@@ -27,7 +28,7 @@ export default function Roles() {
                 request.get(`/api/roles/list?createRole=${createRole}`)
                 .then((res) => {
                     setRoles(res.data.data)
-                    console.log(res.data.data.length);
+                    setTotal(res.data.data.length)
                 })
             }
         },1500)   
@@ -69,13 +70,11 @@ export default function Roles() {
     const addRole = () => {
         form.validateFields().then((values)=> {
             values.createRole = window.localStorage.getItem("username")
-            console.log(values);
             return request.post("/api/roles/add", values)               
         })
         .then((res)=> {
             if(res.data.status === 0) {
                 message.success("创建用户成功")
-                console.log(res.data);
             } else {
                 message.error(res.data.data)
             } 
@@ -89,7 +88,6 @@ export default function Roles() {
     }
 
     const deleteRole = (e) => {
-        console.log(e._id);
         request.post("/api/roles/delete",{_id: e._id})
             .then((res) => {
                 if(res.status === 0)
@@ -105,11 +103,9 @@ export default function Roles() {
             role.username = values.username
             role.notes = values.notes
             role.role = values.role
-            console.log(role);
             // return request.post("/api/roles/add", values)
             request.post("/api/roles/update",role)
             .then((res) => {
-                console.log(res);
                 if(res.data.status === 0) {
                     message.success("更新成功")
                     form.resetFields()
@@ -138,13 +134,13 @@ export default function Roles() {
                 
         <div className={styles.newSet}>
             <Button onClick={()=>{showModal()}} className={styles.button}>+ 新建角色</Button>
-            <Search
+            {/* <Search
             placeholder="请输入角色名"
             // onSearch={onSearch}
             style={{
                 width: 300,
             }}
-            />
+            /> */}
         </div>
         <Modal title={modalType === "add" ? "新建角色" : "更新角色"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
             <Form
@@ -187,8 +183,11 @@ export default function Roles() {
                 pageRoles.map((role) => {
                     return (
                         <div  className={styles.picSetContainer} key={role.username}>
-                            <div className={styles.picBackground}>
-                            </div>
+                            {
+                                role.role === "supervisor" 
+                                ?   <div className={styles.picBackground1} />
+                                :   <div className={styles.picBackground2} />                             
+                            }
                             <div className={styles.picAssetInfo}>
                                 <div className={styles.nameEditor}>
                                     <div className={styles.setName}>{role.username}</div>
@@ -220,7 +219,7 @@ export default function Roles() {
         {   
             roles.length ? 
             <div className={styles.pagination} >
-                <Pagination current={current} onChange={onChange} total={roles.length} defaultPageSize={15} defaultCurrent={1} />            
+                <Pagination current={current} onChange={onChange} total={total} defaultPageSize={15} defaultCurrent={1} />            
             </div>
             : null
         }

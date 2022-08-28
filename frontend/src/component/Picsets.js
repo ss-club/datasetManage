@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { Link,Navigate,useLocation } from "react-router-dom";
 import styles from "./Picsets.module.css"
-import { Pagination, Button, Input, Modal, Form, Upload, message } from "antd"
-import { PlusOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
+import { Pagination, Button, Input, Modal, Form,  message } from "antd"
+import {  DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import { useState } from "react";
 import request from "../assets/utils";
 import { useNavigate } from 'react-router';
@@ -15,28 +14,30 @@ export default function Content() {
     const navigate = useNavigate()
 
     const [form] = Form.useForm()
-    let location = useLocation()
     const [picSets, setPicSets] = useState([])
     const [modalType, setModalType] = useState("add")//新增或更新数据集
     const [picset, setPicset] = useState(null)
+    const [total, setTotal] = useState(0)
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [current, setCurrent] = useState(1);//pagination
+    const [pagePicsets,setPagePicsets] = useState([])//角色列表
 
 
-    useEffect(() => {
-        console.log(location)
-        console.log(window.localStorage.getItem("username"));
-    },[location]) 
 
     useEffect(() => {
         const timer = setInterval(()=> {
             fetchList()
             
         },1500)   
-        return () => {
-            clearInterval(timer)
+            return () => {
+                clearInterval(timer)
         } 
     },[])
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    useEffect(() => {        
+        setPagePicsets(picSets.splice((current-1)*15, current*15))
+    },[current,picSets])
+
     const showModal = () => {
         setModalType("add")
         setIsModalVisible(true);        
@@ -60,6 +61,7 @@ export default function Content() {
         request.get(`/api/picSets/list?createRole=${createRole}`)
             .then((res) => {
                 setPicSets(res.data.data)
+                setTotal(res.data.data.length)
             })
             .catch((err) => {
                 message.error("获取图片集列表失败")
@@ -69,13 +71,11 @@ export default function Content() {
    const createPicSets = () => {
         form.validateFields().then((values)=> {
             values.createRole = window.localStorage.getItem("username")
-            console.log(values);
             return request.post("/api/picSets/add", values)               
         })
         .then((res)=> {
             if(res.data.status === 0) {
                 message.success("创建数据集成功")
-                console.log(res.data);
             } else {
                 message.error(res.data.data)
             } 
@@ -91,7 +91,6 @@ export default function Content() {
         request.post("/api/picSets/delete",{_id})
         .then((res) => {
             if(res.status === 0)
-            console.log(res);
             message.success("删除成功")
         })
         .catch((err) => {
@@ -104,8 +103,6 @@ export default function Content() {
         form.validateFields().then((values)=> {
             picset.picsetName = values.picsetName
             picset.notes = values.notes
-            console.log(picset._id);
-            // return request.post("/api/roles/add", values)
             request.post("/api/picSets/update",picset)
             .then((res) => {
                 if(res.data.status === 0) {
@@ -118,20 +115,6 @@ export default function Content() {
                 console.log(err);
             })               
         })
-        // .then((res)=> {
-        //     if(res.data.status === 0) {
-        //         message.success("创建用户成功")
-        //         console.log(res.data);
-        //     } else {
-        //         message.error(res.data.data)
-        //     } 
-        //     form.resetFields()
-
-        // })
-        // .catch((err) => {
-        //     console.log(err);
-        //     message.error("创建角色出错")
-        // })
         
     }
    const updateClick = (e) => {
@@ -148,12 +131,16 @@ export default function Content() {
         console.log(picSet);
         navigate("/picSets/pictures",{state: picSet})
     }
+
+    const onChange = (page) => {        
+        setCurrent(page);
+    };
     return (
         <>
         
         <div className={styles.newSet}>
             <Button onClick={()=> {showModal()}} className={styles.button}>+ 新建数据集</Button>
-            <Search
+            {/* <Search
             className={styles.search}
             placeholder="输入数据集名称"
             // onSearch={onSearch}
@@ -161,9 +148,9 @@ export default function Content() {
                 width: 300
             }}
             />
-            
+             */}
         </div>
-        <Modal title={modalType == "update" ? "更新数据集" : "新建数据集"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal title={modalType === "update" ? "更新数据集" : "新建数据集"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
             <Form
                 form={form}
                 labelCol={{
@@ -198,7 +185,7 @@ export default function Content() {
         </Modal>
         <div className={styles.picSetsContaier}>
             {
-                picSets.map((picSet) => {
+                pagePicsets.map((picSet) => {
                     return (
                         <div className={styles.picSetContainer}  key={picSet.picsetName}>
                             <div className={styles.picBackground} onClick={() => goPic(picSet)} />
@@ -212,7 +199,6 @@ export default function Content() {
                                     <EditOutlined />
                                 </div>
                                 </div>
-                                <div className={styles.otherInfo}>图片数量</div>
                                 <div className={styles.otherInfo}>{getTime(picSet.createdOn)}</div>
                                 <div className={styles.otherInfo}>{picSet.notes}</div>
                             </div>
@@ -231,7 +217,7 @@ export default function Content() {
             
         </div>
         <div className={styles.pagination}>
-            <Pagination defaultCurrent={1} total={picSets.length} defaultPageSize={15}/>            
+            <Pagination current={current} onChange={onChange} total={total} defaultPageSize={15} defaultCurrent={1} />            
         </div>
         </>
     )

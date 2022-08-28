@@ -1,7 +1,7 @@
-import { Button,Pagination, Form, Modal, Input , message, Upload } from "antd"
+import { Button,Pagination, Form, Modal,  message, Upload } from "antd"
 
-import { PlusOutlined, InboxOutlined  } from '@ant-design/icons'
-import { useEffect, useState, useRef } from "react"
+import {  InboxOutlined  } from '@ant-design/icons'
+import { useEffect, useState } from "react"
 import styles from "./Pictures.module.css"
 import request from "../assets/utils";
 import { useLocation } from "react-router"
@@ -84,7 +84,6 @@ export default function Pictures() {
             <div className={styles.picSetInfo}>               
                 <div>{getTime(location.state.createdOn)}</div>
                 <div>{location.state.notes}</div>
-                <div>1000张照片</div>
             </div>
             <div>
                 <Button onClick={()=> {showModal()}} className={styles.button}>+ 添加图片</Button>
