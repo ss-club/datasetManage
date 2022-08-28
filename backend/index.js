@@ -20,7 +20,7 @@ const indexRouter = require("./routers")
 app.use('/', indexRouter) 
 
 
-mongoose.connect("mongodb://localhost/creStar15",{useNewUrlParser: true})
+mongoose.connect("mongodb+srv://ss:ad193608@cluster0.ogpdcz5.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser: true})
     .then(()=> {
         console.log("数据库连接成功");
         app.listen("5000", () => {
