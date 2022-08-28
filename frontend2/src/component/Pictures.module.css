@@ -1,0 +1,68 @@
+
+.picSetName {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 40px;
+    color: rgb(32, 33, 36);
+    margin: 1px 0;
+}
+
+.picSetInfo {
+    line-height: 20px;
+    font-size: 13px;
+    color: rgb(95, 99, 104);
+    margin-bottom: 10px;
+    /* font-weight: 400; */
+}
+
+.picturesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 45px 18px;
+    width: 97.6%;
+    margin-top: 20px;   
+}
+
+.image {
+    border-radius: 4px 4px 0 0;
+}
+
+.picture {
+    border: 1px solid rgb(240, 240, 240);
+    border-radius: 5px;
+
+}
+
+.picture:hover {
+    cursor: pointer;
+    box-shadow: 0 3px 3px 3px rgb(220, 220, 220 );
+}
+
+.pictureName {
+    height: 20px;
+    width: 150px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-bottom: 4px;
+    padding: 0 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.pagination {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    position: absolute;
+    bottom: 25px;
+    right: 300px
+}
+.button {
+    border-radius: 10px;
+}
+.button:hover {
+    box-shadow: 0 3px 3px 3px rgb(230, 230, 230);
+    border: 0;
+}
+
