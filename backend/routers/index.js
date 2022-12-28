@@ -38,56 +38,56 @@ router.post('/api/upload', upload.single('a_file'), function (req, res) {
 //    }
 });
     
-// router.post("/api/upload",(req,res) => {
-//     const form = new multiparty.Form()
-//     // let count = 0
-//     // form.on('part', function(part) {
-//     //     // You *must* act on the part by reading it
-//     //     // NOTE: if you want to ignore it, just call "part.resume()"
-//     //     console.log(part);
-//     //     if (part.filename === undefined) {
-//     //       // filename is not defined when this is a field and not a file
-//     //       console.log('got field named ' + part.name);
-//     //       // ignore field's content
-//     //       part.resume();
-//     //     }
+router.post("/api/upload",(req,res) => {
+    const form = new multiparty.Form()
+    // let count = 0
+    // form.on('part', function(part) {
+    //     // You *must* act on the part by reading it
+    //     // NOTE: if you want to ignore it, just call "part.resume()"
+    //     console.log(part);
+    //     if (part.filename === undefined) {
+    //       // filename is not defined when this is a field and not a file
+    //       console.log('got field named ' + part.name);
+    //       // ignore field's content
+    //       part.resume();
+    //     }
       
-//     //     if (part.filename !== undefined) {
-//     //       // filename is defined when this is a file
-//     //       count++;
-//     //       console.log('got file named ' + part.name);
-//     //       // ignore file's content here
-//     //       part.resume();
-//     //     }      
-//     //     part.on('error', function(err) {
-//     //       // decide what to do
-//     //       console.log(err);
-//     //     });
-//     //   });
-//     console.log(1);
-//     form.parse(req,(err,fields,file) => {
-//         console.log(fields);
-//         console.log(fields.body)
-//         console.log(JSON.stringify(fields.body[0]))
-//         console.log(JSON.stringify(fields.body[0][0]));
-//         const obj = {}
-//         // fields.body[0][0].forEach((value,key) => {
-//         //     obj[key] = value
-//         // });
-//         try {
-//             if (!fs.existsSync(dir)) fs.mkdirSync(dir)
-//             const buffer = fs.readFileSync(fields.formData.path)
-//             const ws = fs.createWriteStream(`${dir}/smartmore`)
-//             ws.write(buffer)
-//             ws.close()
-//             res.send("切片上传成功")
-//         } catch (error) {
-//             console.error(error)
-//             res.status(500).send(`切片上传失败`)
-//         }
-//     })
-//     res.send("hello")
-// })
+    //     if (part.filename !== undefined) {
+    //       // filename is defined when this is a file
+    //       count++;
+    //       console.log('got file named ' + part.name);
+    //       // ignore file's content here
+    //       part.resume();
+    //     }      
+    //     part.on('error', function(err) {
+    //       // decide what to do
+    //       console.log(err);
+    //     });
+    //   });
+    console.log(1);
+    form.parse(req,(err,fields,file) => {
+        console.log(fields);
+        console.log(fields.body)
+        console.log(JSON.stringify(fields.body[0]))
+        console.log(JSON.stringify(fields.body[0][0]));
+        const obj = {}
+        // fields.body[0][0].forEach((value,key) => {
+        //     obj[key] = value
+        // });
+        try {
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir)
+            const buffer = fs.readFileSync(fields.formData.path)
+            const ws = fs.createWriteStream(`${dir}/smartmore`)
+            ws.write(buffer)
+            ws.close()
+            res.send("切片上传成功")
+        } catch (error) {
+            console.error(error)
+            res.status(500).send(`切片上传失败`)
+        }
+    })
+    res.send("hello")
+})
 
 //登录
 router.post("/api/login",(req,res)=> {    
